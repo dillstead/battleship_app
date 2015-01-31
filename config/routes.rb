@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  root 'games#index'
+  resources :games, only: [:index, :show]
+  post 'games/create'
+  get 'games/status'
+  post 'games/fire'
+  post 'games/join'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
