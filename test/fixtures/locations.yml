@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  board_id: 
+  ship: MyString
+  x: 
+  'y': 
+  hit: false
+  coordinate: MyString
+
+two:
+  board_id: 
+  ship: MyString
+  x: 
+  'y': 
+  hit: false
+  coordinate: MyString
