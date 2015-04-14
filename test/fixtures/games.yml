@@ -1,11 +1,28 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  state: MyString
-  turn_id: 
-  winner_id: 
+new_game:
+  state:
+  turn:
+  winner:
 
-two:
-  state: MyString
-  turn_id: 
-  winner_id: 
+waiting_game:
+  state: "waiting"
+  turn: waiting_player
+  winner:
+  
+playing_game:
+  state: "playing"
+  turn: playing_player_2
+  winner:
+  
+finished_game:
+  state: "finished"
+  turn: winning_player
+  winner: winning_player
+
+
+
+  
+  
+  
+

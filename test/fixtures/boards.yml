@@ -1,7 +1,28 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  player_id: 
+new_board:
+    player: new_player
+    game: new_game
+    
+waiting_board:
+    player: waiting_player
+    game: waiting_game
 
-two:
-  player_id: 
+playing_board_1:
+    player: playing_player_1
+    game: playing_game
+    
+playing_board_2:
+    player: playing_player_2
+    game: playing_game
+    
+winning_board:
+    player: winning_player
+    game: finished_game
+    
+losing_board:
+    player: losing_player
+    game: finished_game
+
+
+

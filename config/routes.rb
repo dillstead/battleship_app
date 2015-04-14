@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'games#index'
   resources :games, only: [:index, :show]
-  post 'games/create'
+  post 'games/start'
   get 'games/status'
   post 'games/fire'
   post 'games/join'

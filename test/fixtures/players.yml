@@ -1,7 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+waiting_player:
+  name: Waiting
+  
+playing_player_1:
+  name: Playing 1
+  
+playing_player_2:
+  name: Playing 2
+  
+new_player:
+  name: New
 
-two:
-  name: MyString
+winning_player:
+  name: Winner
+  
+losing_player:
+  name: Loser
+
+

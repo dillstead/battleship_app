@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class GamesControllerTest < ActionController::TestCase
+  test "should get create" do
+    get :create
+    assert_response :success
+  end
+  
+=begin
   test "should get status" do
     get :status
     assert_response :success
@@ -20,5 +26,5 @@ class GamesControllerTest < ActionController::TestCase
     get :join
     assert_response :success
   end
-
+=end
 end
