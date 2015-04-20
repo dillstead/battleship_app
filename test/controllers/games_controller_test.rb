@@ -1,30 +1,89 @@
 require 'test_helper'
 
 class GamesControllerTest < ActionController::TestCase
-  test "should get create" do
-    get :create
+  def setup
+    @new_player = players(:new_player)
+    @new_board = Array.new(10) { Array.new(10, "") }
+    @waiting_game = games(:waiting_game)
+    @waiting_player = players(:waiting_player)
+    @playing_game = games(:playing_game)
+    @player_2 = players(:playing_player_2)
+  end
+
+  test "should_start_game" do
+    params = { "player" => @new_player.name, "board" => @new_board }
+    assert_difference('Game.count', 1) do
+      post :start, params
+    end
     assert_response :success
+    start_response = JSON.parse(response.body)
+    assert_not_nil start_response["game_id"]
+  end
+
+  test "should_not_start_with_bad_ship" do
+    @new_board[5][5] = "A-8"
+    params = { "player" => @new_player.name, "board" => @new_board }
+    assert_no_difference('Game.count') do
+      post :start, params
+    end
+    assert_response :bad_request
   end
   
-=begin
-  test "should get status" do
-    get :status
+  test "should_join_game" do
+    params = { "game" => @waiting_game.id, "player" => @new_player.name, "board" => @new_board }
+    post :join, params
     assert_response :success
+    join_response = JSON.parse(response.body)
+    assert_equal @waiting_game.id, join_response["game_id"]
   end
-
-  test "should get fire" do
-    get :fire
+  
+  test "should_not_join_unknown_game" do
+    params = { "game" => 0, "player" => @new_player.name, "board" => @new_board }
+    post :join, params
+    assert_response :bad_request
+  end
+  
+  test "should_not_join_game_started" do
+    params = { "game" => @waiting_game.id, "player" => @waiting_player.name, "board" => @new_board }
+    post :join, params
+    assert_response :bad_request
+  end
+  
+  test "fire_should_hit" do
+    params = { "game" => @playing_game.id, "player" => @player_2.name, "shot" => "D-1" }
+    post :fire, params
     assert_response :success
+    join_response = JSON.parse(response.body)
+    assert_equal @playing_game.id, join_response["game_id"]
+    assert join_response["hit"]
+    assert_equal 0, join_response["sunk"]
   end
-
-  test "should get create" do
-    get :create
+  
+  test "should_not_fire_unknown_game" do
+    params = { "game" => 0, "player" => @player_2.name, "shot" => "D-1" }
+    post :fire, params
+    assert_response :bad_request
+  end
+  
+  test "should_not_fire_at_bad_location" do
+    params = { "game" => @playing_game, "player" => @player_2.name, "shot" => "A-55" }
+    post :fire, params
+    assert_response :bad_request
+  end
+  
+  test "should_get_status" do
+    params = { "game" => @waiting_game.id, "player" => @waiting_player.name }
+    get :status, params
     assert_response :success
+    status_response = JSON.parse(response.body)
+    assert_equal @waiting_game.id, status_response["game_id"]
+    assert_equal "waiting", status_response["state"]
+    assert status_response["my_turn"]
   end
-
-  test "should get join" do
-    get :join
-    assert_response :success
+  
+  test "should_not_get_status_unknown_game" do
+    params = { "game" => 0, "player" => @waiting_player.name }
+    get :status, params
+    assert_response :bad_request
   end
-=end
 end

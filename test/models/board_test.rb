@@ -62,7 +62,7 @@ class BoardTest < ActiveSupport::TestCase
     assert_difference('Location.where(hit: true).count', 1) do
       hit, sunk, won = @player1_board.fire("D-1")
       assert hit
-      assert_equal sunk, 0
+      assert_equal 0, sunk
       assert_not won
     end
   end
@@ -71,7 +71,7 @@ class BoardTest < ActiveSupport::TestCase
     assert_difference('Location.where(hit: true).count', 1) do
       hit, sunk, won = @player1_board.fire("C-1")
       assert hit
-      assert_equal sunk, 3
+      assert_equal 3, sunk
       assert_not won
     end
   end
@@ -80,7 +80,7 @@ class BoardTest < ActiveSupport::TestCase
     assert_no_difference('Location.where(hit: true).count') do
       hit, sunk, won = @player1_board.fire("D-7")
       assert_not hit
-      assert_equal sunk, 0
+      assert_equal 0, sunk
       assert_not won
     end
   end
@@ -89,7 +89,7 @@ class BoardTest < ActiveSupport::TestCase
     assert_difference('Location.where(hit: true).count', 1) do
       hit, sunk, won = @player2_board.fire("A-2")
       assert hit
-      assert_equal sunk, 2
+      assert_equal 2, sunk
       assert won
     end
   end

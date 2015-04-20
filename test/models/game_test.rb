@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GameTest < ActiveSupport::TestCase
   def setup
-    @raw_board = Array.new(10) { Array.new(10, "") }
+    @new_board = Array.new(10) { Array.new(10, "") }
     @new_player = players(:new_player)
     @new_game = Game.create
     @finished_game = games(:finished_game)
@@ -26,7 +26,7 @@ class GameTest < ActiveSupport::TestCase
 
   test "should_start_game" do
     assert_difference('Board.count', 1) do
-      id = @new_game.start(@new_player, @raw_board)
+      id = @new_game.start(@new_player, @new_board)
       assert_equal @new_game.id, id
       assert_equal "waiting", @new_game.state
       assert_equal @new_player.id, @new_game.turn_id
@@ -34,27 +34,27 @@ class GameTest < ActiveSupport::TestCase
   end
   
   test "should_not_start_with_bad_ship" do
-    @raw_board[5][5] = "A-8"
+    @new_board[5][5] = "A-8"
     assert_no_difference('Game.count') do
-      assert_raises(ArgumentError) { @new_game.start @new_player, @raw_board }
+      assert_raises(ArgumentError) { @new_game.start @new_player, @new_board }
     end
   end
   
   test "should_not_start_waiting_game" do
-    assert_raises(ArgumentError) { @waiting_game.start @new_player, @raw_board }
+    assert_raises(ArgumentError) { @waiting_game.start @new_player, @new_board }
   end
   
   test "should_not_start_playing_game" do
-    assert_raises(ArgumentError) { @playing_game.start @new_player, @raw_board }
+    assert_raises(ArgumentError) { @playing_game.start @new_player, @new_board }
   end
   
   test "should_not_start_finished_game" do
-    assert_raises(ArgumentError) { @finished_game.start @new_player, @raw_board }
+    assert_raises(ArgumentError) { @finished_game.start @new_player, @new_board }
   end
   
   test "should_join_game" do
     assert_difference('Board.count', 1) do
-      id = @waiting_game.join(@new_player, @raw_board)
+      id = @waiting_game.join(@new_player, @new_board)
       assert_equal @waiting_game.id, id
       assert_equal "playing", @waiting_game.state
       assert_equal @waiting_player.id, @waiting_game.turn_id
@@ -62,42 +62,42 @@ class GameTest < ActiveSupport::TestCase
   end
   
   test "should_not_join_with_bad_ship" do
-    @raw_board[5][5] = "A-8"
+    @new_board[5][5] = "A-8"
     assert_no_difference('Board.count') do
-      assert_raises(ArgumentError) { @waiting_game.join @new_player, @raw_board }
+      assert_raises(ArgumentError) { @waiting_game.join @new_player, @new_board }
     end
   end
 
   test "should_not_join_new_game" do
     assert_no_difference('Board.count') do
-      assert_raises(ArgumentError) { @new_game.join @new_player, @raw_board }
+      assert_raises(ArgumentError) { @new_game.join @new_player, @new_board }
     end
   end
   
   test "should_not_join_playing_game" do
     assert_no_difference('Board.count') do
-      assert_raises(ArgumentError) { @playing_game.join @waiting_player, @raw_board }
+      assert_raises(ArgumentError) { @playing_game.join @waiting_player, @new_board }
     end
   end
   
   test "should_not_join_finished_game" do
     assert_no_difference('Board.count') do
-      assert_raises(ArgumentError) { @finished_game.join @new_player, @raw_board }
+      assert_raises(ArgumentError) { @finished_game.join @new_player, @new_board }
     end
   end
   
   test "should_not_join_game_started" do
     assert_no_difference('Board.count') do
-      assert_raises(ArgumentError) { @waiting_game.join @waiting_player, @raw_board }
+      assert_raises(ArgumentError) { @waiting_game.join @waiting_player, @new_board }
     end
   end
   
   test "fire_should_hit" do
-    assert_difference('Location.where(hit: true).count', 1) do
+    assert_difference('Location.where(hit: true, coordinate: "D-1").count', 1) do
       id, hit, sunk = @playing_game.fire(@player_2, "D-1")
       assert_equal @playing_game.id, id
       assert hit
-      assert_equal sunk, 0
+      assert_equal 0, sunk
       assert_equal @player_1.id, @playing_game.turn_id
       assert_equal nil, @playing_game.winner_id
       assert_equal "playing", @playing_game.state
@@ -105,11 +105,11 @@ class GameTest < ActiveSupport::TestCase
   end
   
   test "fire_should_hit_and_sink" do
-    assert_difference('Location.where(hit: true).count', 1) do
+    assert_difference('Location.where(hit: true, coordinate: "C-1").count', 1) do
       id, hit, sunk = @playing_game.fire(@player_2, "C-1")
       assert_equal @playing_game.id, id
       assert hit
-      assert_equal sunk, 3
+      assert_equal 3, sunk
       assert_equal @player_1.id, @playing_game.turn_id
       assert_equal nil, @playing_game.winner_id
       assert_equal "playing", @playing_game.state
@@ -117,11 +117,11 @@ class GameTest < ActiveSupport::TestCase
   end
   
   test "fire_should_miss" do
-    assert_no_difference('Location.where(hit: true).count') do
+    assert_no_difference('Location.where(hit: true, coordinate: "D-7").count') do
       id, hit, sunk = @playing_game.fire(@player_2, "D-7")
       assert_equal @playing_game.id, id
       assert_not hit
-      assert_equal sunk, 0
+      assert_equal 0, sunk
       assert_equal @player_1.id, @playing_game.turn_id
       assert_equal nil, @playing_game.winner_id
       assert_equal "playing", @playing_game.state
@@ -132,14 +132,14 @@ class GameTest < ActiveSupport::TestCase
     # Switch to player 1, as player 1 has one more shot to win the game.
     @playing_game.turn_id = @player_1.id
     # Now take the final shot as player 2.
-    # assert_difference('Location.where(hit: true).count', 1) do
+    assert_difference('Location.where(hit: true, coordinate: "A-2").count', 1) do
       id, hit, sunk = @playing_game.fire(@player_1, "A-2")
       assert_equal @playing_game.id, id
       assert hit
-      assert_equal sunk, 2
+      assert_equal 2, sunk
       assert_equal "finished", @playing_game.state
       assert_equal @player_1.id, @playing_game.winner_id
-    # end
+    end
   end
   
   test "should_not_fire_at_bad_location" do
@@ -181,35 +181,35 @@ class GameTest < ActiveSupport::TestCase
   test "should_get_waiting_status" do
     id, status, my_turn = @waiting_game.status(@waiting_player)
     assert_equal @waiting_game.id, id
-    assert_equal status, "waiting"
+    assert_equal "waiting", status
     assert my_turn
   end
   
   test "should_get_playing_status_when_my_turn" do
     id, status, my_turn = @playing_game.status(@player_2)
     assert_equal @playing_game.id, id
-    assert_equal status, "playing"
+    assert_equal "playing", status
     assert my_turn
   end
     
   test "should_get_playing_status_when_not_my_turn" do
     id, status, my_turn = @playing_game.status(@player_1)
     assert_equal @playing_game.id, id
-    assert_equal status, "playing"
+    assert_equal "playing", status
     assert_not my_turn
   end
 
   test "should_get_winning_status" do
     id, status, my_turn = @finished_game.status(@winning_player)
     assert_equal @finished_game.id, id
-    assert_equal status, "won"    
+    assert_equal "won", status
     assert my_turn
   end
 
   test "should_get_losing_status" do
     id, status, my_turn = @finished_game.status(@losing_player)
     assert_equal @finished_game.id, id
-    assert_equal status, "lost"    
+    assert_equal "lost", status
     assert_not my_turn
   end
   
