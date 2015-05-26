@@ -20,9 +20,10 @@ finished_game:
   turn: winning_player
   winner: winning_player
 
-
-
-  
-  
-  
-
+# Create enough games for pagination.
+<% (100..149).each do |n| %>
+playing_game_<%= n %>:
+  state: "playing"
+  turn: playing_player_<%= n %>
+  winner:
+<% end %>

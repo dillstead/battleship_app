@@ -1,118 +1,118 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#<% 100.times do |n| %>
-#    waiting_locations_<%= n %>:
-#        board: waiting_board
-#        ship: ""
-#        x: <%= n / 10 %>
-#        y: <%= n % 10 %>
-#        hit: false
-#        coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
-#<% end %>
+<% 100.times do |n| %>
+  waiting_locations_<%= n %>:
+    board: waiting_board
+    ship: ""
+    x: <%= n / 10 %>
+    y: <%= n % 10 %>
+    hit: false
+    coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
+<% end %>
 
 # Leave out the left column.
 <% (10..99).each do |n| %>
-    playing_locations_1_<%= n %>:
-        board: playing_board_1
-        ship: ""
-        x: <%= n % 10 %>
-        y: <%= n / 10 %>
-        hit: false
-        coordinate: <%= "#{("A".ord + n % 10).chr}-#{n / 10 + 1}" %>
+  playing_locations_1_<%= n %>:
+    board: playing_board_1
+    ship: ""
+    x: <%= n % 10 %>
+    y: <%= n / 10 %>
+    hit: false
+    coordinate: <%= "#{("A".ord + n % 10).chr}-#{n / 10 + 1}" %>
 <% end %>
 
 # Fill the left column with a ship of size 3, two of its coordinates hit
 # and a ship of size 2, none of its coordinates hit.
 <% 10.times do |n| %>
-    playing_locations_1_<%= n %>:
-        board: playing_board_1
+  playing_locations_1_<%= n %>:
+    board: playing_board_1
   <% if n < 3 %>
-        ship: C-3
+    ship: C-3
   <% elsif n < 5 %>
-        ship: A-2
+    ship: A-2
   <% else %>
-        ship: ""
+    ship: ""
   <% end %>
-        x: <%= n %>
-        y: 0
-        hit: <%= n < 2 %>
-        coordinate: <%= "#{("A".ord + n % 10).chr}-1" %>
+    x: <%= n %>
+    y: 0
+    hit: <%= n < 2 %>
+    coordinate: <%= "#{("A".ord + n % 10).chr}-1" %>
 <% end %>
 
 # Leave out the top row.
 <% (10..99).each do |n| %>
-    playing_locations_2_<%= n %>:
-        board: playing_board_2
-        ship: ""
-        x: <%= n / 10 %>
-        y: <%= n % 10 %>
-        hit: false
-        coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
+  playing_locations_2_<%= n %>:
+    board: playing_board_2
+    ship: ""
+    x: <%= n / 10 %>
+    y: <%= n % 10 %>
+    hit: false
+    coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
 <% end %>
 
 # Fill the top row with a ship of size 2, one of its coordinates hit.
 <% 10.times do |n| %>
-    playing_locations_2_<%= n %>:
-        board: playing_board_2
+  playing_locations_2_<%= n %>:
+    board: playing_board_2
   <% if n < 2 %>
-        ship: A-2
+    ship: A-2
   <% else %>
-        ship: ""
+    ship: ""
   <% end %>
-        x: 0
-        y: <%= n  %>
-        hit: <%= n < 1 %>
-        coordinate: <%= "A-#{n % 10 + 1}" %>
+    x: 0
+    y: <%= n  %>
+    hit: <%= n < 1 %>
+    coordinate: <%= "A-#{n % 10 + 1}" %>
 <% end %>
 
 # Leave out the left column.
 <% (10..99).each do |n| %>
-    winning_locations_1_<%= n %>:
-        board: winning_board_1
-        ship: ""
-        x: <%= n % 10 %>
-        y: <%= n / 10 %>
-        hit: false
-        coordinate: <%= "#{("A".ord + n % 10).chr}-#{n / 10 + 1}" %>
+  winning_locations_1_<%= n %>:
+    board: winning_board
+    ship: ""
+    x: <%= n % 10 %>
+    y: <%= n / 10 %>
+    hit: false
+    coordinate: <%= "#{("A".ord + n % 10).chr}-#{n / 10 + 1}" %>
 <% end %>
 
 # Fill the left column with a ship of size 3, all of its coordinates hit.
 <% 10.times do |n| %>
-    winning_locations_1_<%= n %>:
-        board: winning_board_1
+  winning_locations_1_<%= n %>:
+    board: winning_board
   <% if n < 3 %>
-        ship: C-3
+    ship: C-3
   <% else %>
-        ship: ""
+    ship: ""
   <% end %>
-        x: <%= n %>
-        y: 0
-        hit: <%= n < 3 %>
-        coordinate: <%= "#{("A".ord + n % 10).chr}-1" %>
+    x: <%= n %>
+    y: 0
+    hit: <%= n < 3 %>
+    coordinate: <%= "#{("A".ord + n % 10).chr}-1" %>
 <% end %>
 
 # Leave out the top row.
 <% (10..99).each do |n| %>
-    losing_locations_2_<%= n %>:
-        board: losing_board_2
-        ship: ""
-        x: <%= n / 10 %>
-        y: <%= n % 10 %>
-        hit: false
-        coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
+  losing_locations_2_<%= n %>:
+    board: losing_board
+    ship: ""
+    x: <%= n / 10 %>
+    y: <%= n % 10 %>
+    hit: false
+    coordinate: <%= "#{("A".ord + n / 10).chr}-#{n % 10 + 1}" %>
 <% end %>
 
 # Fill the top row with a ship of size 2, none of its coordinates hit.
 <% 10.times do |n| %>
-    losing_locations_2_<%= n %>:
-        board: losing_board_2
+  losing_locations_2_<%= n %>:
+    board: losing_board
   <% if n < 2 %>
-        ship: A-2
+    ship: A-2
   <% else %>
-        ship: ""
+    ship: ""
   <% end %>
-        x: 0
-        y: <%= n  %>
-        hit: false
-        coordinate: <%= "A-#{n % 10 + 1}" %>
+    x: 0
+    y: <%= n  %>
+    hit: false
+    coordinate: <%= "A-#{n % 10 + 1}" %>
 <% end %>

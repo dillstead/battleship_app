@@ -2,9 +2,12 @@ class GamesController < ApplicationController
   rescue_from StandardError, with: :error
     
   def index
+    # Games with nil state cannot be displayed.
+    @games = Game.where.not(state: nil).paginate(page: params[:page])
   end
 
   def show
+    @game = Game.find(params[:id])
   end
 
   def status

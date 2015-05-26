@@ -7,6 +7,26 @@ class LocationTest < ActiveSupport::TestCase
       coordinate: "A-1")
   end
   
+  test "state_should_be_hit" do
+    @new_location.hit = true
+    assert_equal "hit", @new_location.state
+  end
+  
+  test "state_should_be_miss" do
+    @new_location.hit = true
+    @new_location.ship = ""
+    assert_equal "miss", @new_location.state
+  end
+  
+  test "state_should_be_open" do
+    @new_location.ship = ""
+    assert_equal "open", @new_location.state
+  end
+  
+  test "state_should_be_ship" do
+    assert_equal "ship", @new_location.state
+  end
+  
   test "should_be_valid" do
     assert @new_location.valid?
   end

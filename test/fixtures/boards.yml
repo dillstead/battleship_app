@@ -1,28 +1,38 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 new_board:
-    player: new_player
-    game: new_game
-    
+  player: new_player
+  game: new_game
+
 waiting_board:
-    player: waiting_player
-    game: waiting_game
+  player: waiting_player
+  game: waiting_game
 
 playing_board_1:
-    player: playing_player_1
-    game: playing_game
+  player: playing_player_1
+  game: playing_game
     
 playing_board_2:
-    player: playing_player_2
-    game: playing_game
+  player: playing_player_2
+  game: playing_game
     
 winning_board:
-    player: winning_player
-    game: finished_game
+  player: winning_player
+  game: finished_game
     
 losing_board:
-    player: losing_player
-    game: finished_game
+  player: losing_player
+  game: finished_game
 
+# Create enough boards for pagination.
+<% (100..149).each do |n| %>
+playing_board_<%= n %>:
+  player: playing_player_<%= n %>
+  game: playing_game_<%= n %>
+    
+playing_board_<%= n + 50 %>:
+  player: playing_player_<%= n + 50 %>
+  game: playing_game_<%= n %>
+<% end %>
 
 

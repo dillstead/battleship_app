@@ -1,0 +1,22 @@
+<section class="player-board">
+  <div class="player-name"><%= player_name %></div>
+  <div class="board">
+    <div class="board-row">
+      <div class="board-col header"></div>
+      <% (1..10).each do |n| %>
+        <div class="board-col header"><%= n %></div>      
+      <% end %>
+    </div>
+    <% locations.each_with_index do |location, n| %>
+      <% if n % 10 == 0 %>
+        <% unless n == 0 %>
+          </div> 
+        <% end %>
+        <div class="board-row">
+          <div class="board-col header row"><%= ("A".ord + (n / 10)).chr %></div>
+      <% end %>
+      <div class="board-col <%= location.state %>"></div>
+    <% end %>
+    </div>
+  </div>
+</section>

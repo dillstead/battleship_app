@@ -1,0 +1,139 @@
+/* Navigation bar styling. */
+nav {
+margin: 5px 5px 5px 5px;
+}
+
+nav ul {
+margin: 0px;
+list-style-type: none;
+padding: 5px 0px 5px 0px;
+}
+
+nav ul li {
+display: inline;
+padding: 5px 10px 5px 10px;
+}
+
+/* Only display underlines when anchors are hovered. */
+a:hover {
+text-decoration: underline; 
+}
+
+a {
+text-decoration: none; 
+}
+
+/* Center the page header and put it flush to the navigation bar. */
+header h1 {
+margin-top: 0px;
+margin-bottom: 5px;
+text-align: center; 
+}
+
+/* Use the container to align the games table and pagination 
+ * links.  Text-align works because the table and links are 
+ * grouped together to display as inline-block.
+ */
+#games-table-container {
+width: 100%;
+text-align: center;
+}
+
+/* Display the games table and pagination links as inline-block
+ * so they can be centered together.
+ */
+#games-table {
+display: inline-block;
+margin: 0 auto;
+}
+
+/* Align the left end of the pagination links with the left end of
+ * the table.  Reset the text alignment which was centered by the
+ * the container.
+ */
+#games-table .pagination {
+padding-left: 4px;
+text-align: left;
+}
+
+/* Set games table headers apart from table data. */
+#games-table th {
+font-weight: bold; 
+}
+
+/* Use more of the screen width for the games table columns. */
+#games-table th, td {
+padding-right: 50px;
+text-align: left;
+}
+
+/* Center the game state display and put it flush with the
+header. */
+#game-state {
+text-align: center;
+font-weight:  bold;
+margin-top: 0px;
+margin-bottom: 5px;
+}
+
+/* Contains a player name and the player's board.  Take up
+ * 50% of the screen width and float left to allow two
+ * boards to be displayed on the same line.
+ */
+section.player-board {
+width: 50%;
+float: left;
+}
+
+/* Center the player's name. */
+div.player-name {
+width: 100%;
+font-weight: bold;
+text-align: center; 
+margin-bottom: 5px;
+}
+
+/* Each board takes up 100% of 50% of the screen width. */
+div.board {
+display: table;
+width: 100%;
+border-spacing: 2px;
+}
+
+div.board-row {
+display: table-row;
+}
+
+/* Set of width of 9% since there are 11 columns in a board. */
+div.board-col {
+display: table-cell;
+vertical-align: top;
+width: 9%;
+}
+
+/* The following classes mark board locations as hit, miss,
+ * open, or ship.
+ */
+div.board-col.header {
+font-weight: bold;
+}
+
+div.board-col.header.row {
+text-align: right;
+}
+
+div.board-col.open {
+background-color: white;
+}
+
+div.board-col.hit {
+background-color: red;
+}
+
+div.board-col.miss {
+background-color: blue;
+}
+
+div.board-col.ship {
+background-color: black;
+}

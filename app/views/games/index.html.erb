@@ -1,0 +1,15 @@
+<% provide :header, "Games" %>
+<div id="games-table-container">
+  <section id="games-table">
+    <%= will_paginate %>
+    <table>
+      <tr>
+        <th>Game Id</th>
+        <th>First Player</th>
+        <th>Second Player</th>
+        <th>Game State</th>
+      </tr>
+      <%= render @games %>
+    </table>
+  </section>
+</div>

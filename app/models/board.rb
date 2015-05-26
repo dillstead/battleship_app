@@ -1,7 +1,8 @@
 class Board < ActiveRecord::Base
   belongs_to :player
   belongs_to :game
-  has_many :locations, dependent: :destroy
+  # Order the locations row by row.
+  has_many :locations, -> { order "x ASC", "y ASC" }, dependent: :destroy
   validates :player_id, presence: true
   validates :game_id, presence: true
   BOARD_SIZE = 100

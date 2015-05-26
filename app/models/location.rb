@@ -9,5 +9,15 @@ class Location < ActiveRecord::Base
   validates :y, numericality: { only_integer: true, greater_than_or_equal_to: 0,
     less_than: 10 }
   validates :board_id, presence: true
-
+  
+  def state
+    # Hit - if hit and has a ship
+    return "hit" if self.hit && self.ship != ""
+    # Miss - is hit and doesn't have a ship
+    return "miss" if self.hit && self.ship == ""
+    # Open - if not hit and doesn't have a ship
+    return "open" if self.ship == ""
+    # Ship - if not hit and has a ship
+    "ship"
+  end
 end

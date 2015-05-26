@@ -17,5 +17,14 @@ winning_player:
   
 losing_player:
   name: Loser
+  
+# Create enough players for pagination.
+<% (100..149).each do |n| %>
+playing_player_<%= n %>:
+  name: Playing <%= n %>
+    
+playing_player_<%= n + 50 %>:
+  name: Playing <%= n + 50 %>
+<% end %>
 
 

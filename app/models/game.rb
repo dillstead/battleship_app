@@ -1,10 +1,28 @@
 class Game < ActiveRecord::Base
   belongs_to :winner, class_name: "Player"
   belongs_to :turn, class_name: "Player"
-  has_many :boards, dependent: :destroy
-  has_many :players, through: :boards 
+  # The board created first is the first board.
+  has_many :boards, -> { order "created_at ASC" }, dependent: :destroy
+  # The first player created the first board.
+  has_many :players, -> { order "boards.created_at ASC" }, through: :boards 
   validates :state, inclusion: { in: ["waiting", "playing", "finished", nil],
     message: "%{value} is not a valid state" }
+  
+  def first_player_board
+    self.boards[0]
+  end
+  
+  def second_player_board
+    self.boards[1]
+  end
+  
+  def first_player_name
+    self.players[0].nil? ? nil : self.players[0].name
+  end
+  
+  def second_player_name
+    self.players[1].nil? ? nil : self.players[1].name
+  end
   
   def start(player, rawBoard)
     raise ArgumentError, "Incorrect state #{self.state}" unless self.state.nil?

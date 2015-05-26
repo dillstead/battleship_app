@@ -10,7 +10,47 @@ class GamesControllerTest < ActionController::TestCase
     @player_2 = players(:playing_player_2)
   end
 
+  test "should_get_paginated_index" do
+    get :index
+    assert_response :success
+    assert_template "games/index"
+    assert_select "h1", "Games"
+    assert_select "div.pagination"
+    Game.where.not(state: nil).paginate(page: 1).each do |game|
+        assert_select "a[href=?]", game_path(game) 
+    end
+  end
+  
+  test "should_show_game" do
+    get :show, id: @playing_game.id
+    assert_response :success
+    assert_template "games/show"
+    assert_select "h1", "Game"
+    assert_select "#game-state", "playing"
+    assert_select ".player-board", 2
+    assert_select ".player-name", 2
+    assert_select ".board", 2
+    # Assert that each board has 11 rows and 11 columns.
+    assert_select ".board" do |boards|
+      boards.each do |board|
+        assert_select board, ".board-row" , 11 do |rows|
+          rows.each_with_index do |row, i|
+            if i == 0
+              assert_select row, ".header", 11
+              assert_select row, ".board-col", 11
+            else
+              assert_select row, ".header", 1
+              assert_select row, ".board-col", 11
+            end
+          end
+        end
+      end
+    end
+  end
+
   test "should_start_game" do
+    # Even though using JSON parameters, must use the hash form for testing
+    # since the server is mocked, not real.
     params = { "player" => @new_player.name, "board" => @new_board }
     assert_difference('Game.count', 1) do
       post :start, params
