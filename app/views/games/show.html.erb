@@ -1,11 +1,7 @@
 <% provide :header, "Game" %>
-<section id="game-state"><%= @game.state %></section>
-<% unless @game.first_player_name.nil? %>
-  <%= render partial: "player_board", locals: { player_name: @game.first_player_name,
-    locations: @game.first_player_board.locations } %>
-<% end %>
-<% unless @game.second_player_name.nil? %>
-  <%= render partial: "player_board", locals: { player_name: @game.second_player_name,
-    locations: @game.second_player_board.locations } %>
-<% end %>
-
+<!-- Create a unique id for this particular game so it can be asynchronously
+updated with only its state - prevents races if the user quickly switch from
+one game to the next -->
+<section id="game-<%= @game.id %>">
+  <%= render partial: "playing_game", locals: { game: @game } %>
+</section>

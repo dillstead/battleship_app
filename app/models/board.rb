@@ -5,8 +5,18 @@ class Board < ActiveRecord::Base
   has_many :locations, -> { order "x ASC", "y ASC" }, dependent: :destroy
   validates :player_id, presence: true
   validates :game_id, presence: true
+  # Board size is 10 x 10.
   BOARD_SIZE = 100
   
+  # Public: Adds locations and saves them to the database.  If exceptions
+  # are thrown the database is cleaned up before returning.
+  #
+  # rawLocations - Locations represented by a 2-D array, whose contents are 
+  # ships.
+  #
+  # Returns Nothing.
+  # Raises ArgumentError if location validation failed.
+  # Raises ArgumentError if the number of locations is incorrect.
   def add_locations(rawLocations)
       numLocations = 0
       rawLocations.each_with_index do |row, x|
@@ -31,16 +41,22 @@ class Board < ActiveRecord::Base
       end
   end
   
+  # Public: Fires a shot at a location.
+  #
+  # shot - A String representing the coorindates of a shot, e.g., "A-5".
+  #
+  # Returns a Boolean indicating if a ship was hit, if a ship was sunk, 
+  # the Integer size of the ship, and a Boolean indicating if the game
+  # was just won.
+  # Raises ArgumentError if the shot could not be located.
   def fire(shot)
     # Lookup the location
     location = locations.find_by(coordinate: shot)
     raise ArgumentError, "Cannot locate shot" if location.nil?
     sunk, won = 0, false
+    location.hit = true
+    location.save!
     unless location.ship == ""
-      location.hit = true
-      # If an error occurs saving, don't bother clearing the changes since
-      # none were made.
-      location.save!
       # Check to see if the ship was sunk before declaring victory.
       if locations.where(ship: location.ship, hit: false).count == 0
         # Grab the size of the ship that was just sunk.
@@ -50,6 +66,6 @@ class Board < ActiveRecord::Base
         won = true if locations.where("ship != '' and hit == 'f'").count == 0
       end
     end
-    return location.hit, sunk.to_i, won
+    return location.state == "hit", sunk.to_i, won
   end
 end

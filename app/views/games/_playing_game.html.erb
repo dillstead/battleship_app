@@ -1,0 +1,9 @@
+<section id="game-state"><%= game.state %></section>
+<% unless game.first_player_name.nil? %>
+  <%= render partial: "player_board", locals: { player_name: game.first_player_name,
+    locations: game.first_player_board.locations } %>
+<% end %>
+<% unless game.second_player_name.nil? %>
+  <%= render partial: "player_board", locals: { player_name: game.second_player_name,
+    locations: game.second_player_board.locations } %>
+<% end %>

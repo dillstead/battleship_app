@@ -8,22 +8,45 @@ class Game < ActiveRecord::Base
   validates :state, inclusion: { in: ["waiting", "playing", "finished", nil],
     message: "%{value} is not a valid state" }
   
+  # Public: Returns the first player's board.  The first player is the player
+  # that started the game.
+  #
+  # Returns a Board or nil if there is no board.
   def first_player_board
     self.boards[0]
   end
   
+  # Public: Returns the second player's board.  The second player is the player
+  # that joined the game.
+  #
+  # Returns a Board or nil if there is no board.
   def second_player_board
     self.boards[1]
   end
   
+  # Public: Returns the first player's name.  The first player is the player that
+  # started the game.
+  #
+  # Returns a name String or nil if there is no first player.
   def first_player_name
     self.players[0].nil? ? nil : self.players[0].name
   end
   
+  # Public: Returns the second player's name.  The second player is the player 
+  # that joined the game.
+  #
+  # Returns a name String or nil if there is no second player.
   def second_player_name
     self.players[1].nil? ? nil : self.players[1].name
   end
   
+  # Public: Creates a new board and saves it to the database.  If any exceptions 
+  # are thrown the database is cleaned up before returning.
+  #
+  # player   - The Player that wants to start the game.
+  # rawBoard - A board represented by a 2-D array, whose contents are ships.
+  #
+  # Returns the Integer game id.
   def start(player, rawBoard)
     raise ArgumentError, "Incorrect state #{self.state}" unless self.state.nil?
     my_board = boards.create!(player_id: player.id)
@@ -43,6 +66,15 @@ class Game < ActiveRecord::Base
     return self.id
   end 
 
+  # Public: Add a player to an existing game and updates the database.  If any 
+  # exceptions are thrown the database is cleaned up before returning.
+  #
+  # player   - The Player that wants to join the game.
+  # rawBoard - A board represented by a 2-D array, whose contents are ships.
+  #
+  # Returns The Integer game id.
+  # Raises ArgumentError if the game is not in the correct state.
+  # Raises ArgumentError if the player started the game.
   def join(player, rawBoard)
     raise ArgumentError, "Incorrect state #{self.state}" unless self.state == "waiting"
     # The joining player cannot already be playing the game.
@@ -63,6 +95,16 @@ class Game < ActiveRecord::Base
     return self.id
   end
   
+  # Public: Fires a shot at an opponent's board and updates the database.
+  #
+  # player - The Player taking the shot.
+  # shot   - A String representing the coorindates of a shot, e.g., "A-5".
+  #
+  # Returns the Integer game id, a Boolean indicating if a ship was hit,
+  # and, if a ship was sunk, the Integer size of the ship.
+  # Raises ArgumentError if the game is not in the correct state.
+  # Raises ArgumentError if the player is not part of the game.
+  # Raises ArgumentError if it's not the player's turn.
   def fire(player, shot)
     # The game better be underway and it better be my turn.
     raise ArgumentError, "Incorrect state #{self.state}" unless self.state == "playing"
@@ -84,6 +126,14 @@ class Game < ActiveRecord::Base
     return self.id, hit, sunk
   end
   
+  # Public: Returns the current game status.
+  #
+  # player - The Player requesting the status.
+  #
+  # Returns the Integer game id, a String indicating if the player has 
+  # won or lost the game, and a Boolean indicating if it's the player's turn.
+  # Raises ArgumentError if the player is not part of the game.
+  # Raises ArgumentError if the game hasn't been started.
   def status(player)
     raise ArgumentError, "Not part of the game" if players.find_by(id: player.id).nil?
     raise ArgumentError, "Game hasn't started" if self.state.nil?

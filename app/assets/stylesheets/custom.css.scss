@@ -109,10 +109,11 @@ div.board-col {
 display: table-cell;
 vertical-align: top;
 width: 9%;
+text-align: center;
 }
 
-/* The following classes mark board locations as hit, miss,
- * open, or ship.
+/* The following classes mark board locations as hit, miss, or
+ * open.
  */
 div.board-col.header {
 font-weight: bold;
@@ -132,8 +133,4 @@ background-color: red;
 
 div.board-col.miss {
 background-color: blue;
-}
-
-div.board-col.ship {
-background-color: black;
 }

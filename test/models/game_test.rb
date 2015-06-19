@@ -117,7 +117,7 @@ class GameTest < ActiveSupport::TestCase
   end
   
   test "fire_should_miss" do
-    assert_no_difference('Location.where(hit: true, coordinate: "D-7").count') do
+    assert_difference('Location.where(hit: true, coordinate: "D-7").count', 1) do
       id, hit, sunk = @playing_game.fire(@player_2, "D-7")
       assert_equal @playing_game.id, id
       assert_not hit

@@ -19,12 +19,9 @@ class LocationTest < ActiveSupport::TestCase
   end
   
   test "state_should_be_open" do
+    assert_equal "open", @new_location.state
     @new_location.ship = ""
     assert_equal "open", @new_location.state
-  end
-  
-  test "state_should_be_ship" do
-    assert_equal "ship", @new_location.state
   end
   
   test "should_be_valid" do

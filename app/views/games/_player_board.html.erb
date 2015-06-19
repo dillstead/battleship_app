@@ -15,7 +15,7 @@
         <div class="board-row">
           <div class="board-col header row"><%= ("A".ord + (n / 10)).chr %></div>
       <% end %>
-      <div class="board-col <%= location.state %>"></div>
+      <div class="board-col <%= location.state %>"><%= location.ship %></div>
     <% end %>
     </div>
   </div>

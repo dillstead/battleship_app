@@ -70,7 +70,7 @@ class GamesControllerTest < ActionController::TestCase
   end
   
   test "should_join_game" do
-    params = { "game" => @waiting_game.id, "player" => @new_player.name, "board" => @new_board }
+    params = { "game_id" => @waiting_game.id, "player" => @new_player.name, "board" => @new_board }
     post :join, params
     assert_response :success
     join_response = JSON.parse(response.body)
@@ -78,19 +78,19 @@ class GamesControllerTest < ActionController::TestCase
   end
   
   test "should_not_join_unknown_game" do
-    params = { "game" => 0, "player" => @new_player.name, "board" => @new_board }
+    params = { "game_id" => 0, "player" => @new_player.name, "board" => @new_board }
     post :join, params
     assert_response :bad_request
   end
   
   test "should_not_join_game_started" do
-    params = { "game" => @waiting_game.id, "player" => @waiting_player.name, "board" => @new_board }
+    params = { "game_id" => @waiting_game.id, "player" => @waiting_player.name, "board" => @new_board }
     post :join, params
     assert_response :bad_request
   end
   
   test "fire_should_hit" do
-    params = { "game" => @playing_game.id, "player" => @player_2.name, "shot" => "D-1" }
+    params = { "game_id" => @playing_game.id, "player" => @player_2.name, "shot" => "D-1" }
     post :fire, params
     assert_response :success
     join_response = JSON.parse(response.body)
@@ -100,19 +100,19 @@ class GamesControllerTest < ActionController::TestCase
   end
   
   test "should_not_fire_unknown_game" do
-    params = { "game" => 0, "player" => @player_2.name, "shot" => "D-1" }
+    params = { "game_id" => 0, "player" => @player_2.name, "shot" => "D-1" }
     post :fire, params
     assert_response :bad_request
   end
   
   test "should_not_fire_at_bad_location" do
-    params = { "game" => @playing_game, "player" => @player_2.name, "shot" => "A-55" }
+    params = { "game_id" => @playing_game, "player" => @player_2.name, "shot" => "A-55" }
     post :fire, params
     assert_response :bad_request
   end
   
   test "should_get_status" do
-    params = { "game" => @waiting_game.id, "player" => @waiting_player.name }
+    params = { "game_id" => @waiting_game.id, "player" => @waiting_player.name }
     get :status, params
     assert_response :success
     status_response = JSON.parse(response.body)
@@ -122,7 +122,7 @@ class GamesControllerTest < ActionController::TestCase
   end
   
   test "should_not_get_status_unknown_game" do
-    params = { "game" => 0, "player" => @waiting_player.name }
+    params = { "game_id" => 0, "player" => @waiting_player.name }
     get :status, params
     assert_response :bad_request
   end

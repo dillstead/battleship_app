@@ -6,11 +6,37 @@
       <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
       <%= csrf_meta_tags %>
   </head>
+  <script type="text/javascript">
+    var intervalId;
+    $(window).load(function() {
+      //console.log("window load");
+      // Refresh the playing game on regular intervals.
+      intervalId = setInterval(function() {
+        // If the browser is displaying a game, extract the
+        // game id from the pathname (/game/[id]) and 
+        // update the playing game by using the unique id.
+        //console.log("path: " + window.location.pathname);
+        var pathComponents = window.location.pathname.split("/");
+        if (pathComponents.length == 3) {
+          var gameId = pathComponents[2];
+          //console.log("updating game id: " + gameId);
+          // Update the unique game.
+          $("#game-" + gameId).load(gameId + "/playing");
+        }
+      }, 1000);
+    });
+    
+    $(window).unload(function() {
+      // Be nice and clear the timer though I'm not sure when this is called.
+      //console.log("window unload");
+      clearInterval(intervalId);
+    });
+  </script>
   <body>
+    <%= render 'layouts/navbar' %>
     <header>
       <h1><%= yield(:header) %></h1>      
     </header>
-    <%= render 'layouts/navbar' %>
     <%= yield %>
   </body>
 </html>

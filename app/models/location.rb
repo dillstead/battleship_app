@@ -10,14 +10,17 @@ class Location < ActiveRecord::Base
     less_than: 10 }
   validates :board_id, presence: true
   
+  # Public: Returns the location's state - "hit" if the location is hit
+  # and it contains a ship, "miss" if the location is hit and it doesn't
+  # contain a ship, and "open" otherwise.
+  #
+  # Returns a String containing the state.
   def state
     # Hit - if hit and has a ship
     return "hit" if self.hit && self.ship != ""
     # Miss - is hit and doesn't have a ship
     return "miss" if self.hit && self.ship == ""
-    # Open - if not hit and doesn't have a ship
-    return "open" if self.ship == ""
-    # Ship - if not hit and has a ship
-    "ship"
+    # Open - if not yet fired on
+    "open"
   end
 end

@@ -77,7 +77,7 @@ class BoardTest < ActiveSupport::TestCase
   end
   
   test "fire_should_miss" do
-    assert_no_difference('Location.where(hit: true).count') do
+    assert_difference('Location.where(hit: true).count', 1) do
       hit, sunk, won = @player1_board.fire("D-7")
       assert_not hit
       assert_equal 0, sunk
